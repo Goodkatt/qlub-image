@@ -27,3 +27,5 @@ ingress:
       pathType: Prefix
     - path: /
       pathType: Prefix
+
+
