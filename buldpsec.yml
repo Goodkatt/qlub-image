@@ -1,0 +1,43 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - wget https://github.com/mikefarah/yq/releases/download/v4.40.5/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq
+      - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+      - chmod 700 get_helm.sh
+      - ./get_helm.sh
+      - export IMAGE_TAG=$(date +%Y.%m.%d.%H%M%S)
+      #- export CHART_VERSION=$(date +%Y.%m.%d.%H%M)
+      #- export CHART_VERSION=$(date +%Y.%m.%d.%H%M%S)
+      - export CHART_VERSION=$(date +%Y.%m.%d | sed 's/\.0*/./g')-build$(date +%H%M%S)
+      - export APP_VERSION=$(date +%Y%m%d-%H%M)
+      - echo "$IMAGE_TAG"
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - yq e -i ".version = \"$CHART_VERSION\"" qlub-helm-chart/Chart.yaml
+      - yq e -i ".appVersion = \"$CHART_VERSION\"" qlub-helm-chart/Chart.yaml
+      - cat qlub-helm-chart/Chart.yaml
+      - cat qlub-helm-chart/Chart.yaml
+      #- sed -i "s|^\(\s*tag:\s*\).*|\1$IMAGE_TAG|" qlub-helm-chart/values.yaml
+      - yq e -i ".image.tag = \"$IMAGE_TAG\"" qlub-helm-chart/values.yaml
+      - cat qlub-helm-chart/values.yaml
+      - helm package qlub-helm-chart --destination packaged_charts/
+      - ls packaged_charts
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | helm registry login --username AWS --password-stdin 023703779142.dkr.ecr.eu-west-1.amazonaws.com
+      - helm push packaged_charts/qlub-helm-repo-$CHART_VERSION.tgz oci://$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/
+
+
+
+
