@@ -2,5 +2,5 @@ apiVersion: v2
 name: qlub-helm-repo
 description: A Helm chart for Django application
 type: application
-version: 2025.7.27-build193548
-appVersion: "2025.7.27-build193548"
+version: 2025.7.27-build194507
+appVersion: "2025.7.27-build194507"
