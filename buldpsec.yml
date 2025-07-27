@@ -37,7 +37,12 @@ phases:
       - ls packaged_charts
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | helm registry login --username AWS --password-stdin 023703779142.dkr.ecr.eu-west-1.amazonaws.com
       - helm push packaged_charts/qlub-helm-repo-$CHART_VERSION.tgz oci://$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/
-
-
-
-
+      - git status
+      - git config --global user.email "gorkem444altunay@hotmail.com"
+      - git config --global user.name "grkm"
+      - git remote set-url origin https://$GITHUB_USER:$GIT_PAT@github.com/$GITHUB_USER/qlub-image.git
+      - git add qlub-helm-chart/Chart.yaml qlub-helm-chart/values.yaml
+      - git commit -m "first commit"
+      - git fetch origin
+      - git rebase origin/main
+      - git push -u origin main
