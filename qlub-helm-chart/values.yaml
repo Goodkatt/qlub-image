@@ -1,7 +1,7 @@
 replicaCount: 2
 image:
   repository: 023703779142.dkr.ecr.eu-west-1.amazonaws.com/qlub-image-repo
-  tag: 2025.07.27.191735
+  tag: 2025.07.27.193548
   pullPolicy: IfNotPresent
 serviceAccount:
   name: eks-secrets-sa
