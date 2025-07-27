@@ -24,6 +24,13 @@ spec:
             - name: secrets-store-inline
               mountPath: "/mnt/secrets"
               readOnly: true
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
       volumes:
         - name: secrets-store-inline
           csi:
