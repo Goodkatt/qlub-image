@@ -24,14 +24,14 @@
 ### Also ArgoCD is authenticated with GitHub and arranged it to check the qlub-helm-chart path and turned on the auto sync so whenever the chart is updated it auto syncs the ArgoCD application.
 
 # Secrets as volume mounts from Secrets Manager Service
-![screenshot](secrets.jpg)
+![screenshot](assets/secrets.jpg)
 # DB Migration
-![screenshot](migration.jpg)
+![screenshot](assets/migration.jpg)
 # Application UI and LB
-![screenshot](application.jpg)
+![screenshot](assets/application.jpg)
 # ArgoCD auto sync enabled
-![screenshot](argocd.jpg)
+![screenshot](assets/argocd.jpg)
 # HPA with the load
-![screenshot](hpa.jpg)
+![screenshot](assets/hpa.jpg)
 # Cluster Autoscaler
-![screenshot](cluster-autoscaler.jpg)
+![screenshot](assets/cluster-autoscaler.jpg)
